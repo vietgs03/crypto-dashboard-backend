@@ -1,0 +1,96 @@
+crypto-dashboard-backend/
+├── cmd/
+│   ├── api-gateway/
+│   │   └── main.go
+│   ├── user-service/
+│   │   └── main.go
+│   ├── market-data-service/
+│   │   └── main.go
+│   ├── whale-tracking-service/
+│   │   └── main.go
+│   ├── portfolio-service/
+│   │   └── main.go
+│   └── notification-service/
+│       └── main.go
+├── internal/
+│   ├── user/
+│   │   ├── domain/
+│   │   │   ├── entity/
+│   │   │   │   ├── user.go
+│   │   │   │   └── profile.go
+│   │   │   ├── repository/
+│   │   │   │   └── interface.go
+│   │   │   └── service/
+│   │   │       └── interface.go
+│   │   ├── application/
+│   │   │   ├── dto/
+│   │   │   │   ├── request.go
+│   │   │   │   └── response.go
+│   │   │   └── service/
+│   │   │       └── user_service.go
+│   │   └── infrastructure/
+│   │       ├── persistence/
+│   │       │   └── postgres/
+│   │       └── auth/
+│   │           └── jwt/
+│   ├── market-data/
+│   │   ├── domain/
+│   │   │   ├── entity/
+│   │   │   │   ├── coin.go
+│   │   │   │   └── market.go
+│   │   │   ├── repository/
+│   │   │   └── service/
+│   │   ├── application/
+│   │   │   ├── dto/
+│   │   │   └── service/
+│   │   └── infrastructure/
+│   │       ├── coingecko/
+│   │       └── binance/
+│   ├── whale-tracking/
+│   │   ├── domain/
+│   │   ├── application/
+│   │   └── infrastructure/
+│   ├── portfolio/
+│   │   ├── domain/
+│   │   ├── application/
+│   │   └── infrastructure/
+│   └── notification/
+│       ├── domain/
+│       ├── application/
+│       └── infrastructure/
+├── pkg/
+│   ├── logger/
+│   ├── database/
+│   │   ├── postgres/
+│   │   └── redis/
+│   ├── messaging/
+│   │   ├── kafka/
+│   │   └── rabbitmq/
+│   ├── auth/
+│   │   └── jwt/
+│   └── websocket/
+├── configs/
+│   ├── development/
+│   │   └── config.yaml
+│   ├── production/
+│   │   └── config.yaml
+│   └── kubernetes/
+│       ├── deployments/
+│       └── services/
+├── scripts/
+│   ├── migrations/
+│   └── seed/
+├── docs/
+│   ├── api/
+│   │   └── swagger/
+│   └── architecture/
+│       └── diagrams/
+├── tests/
+│   ├── unit/
+│   └── integration/
+├── .gitignore
+├── Dockerfile
+├── docker-compose.yaml
+├── go.mod
+├── go.sum
+└── README.md
