@@ -16,6 +16,7 @@ The system follows a microservices architecture pattern with the following key c
 
 [See detailed architecture diagrams](docs/architecture/diagrams/architecture.md)
 
+
 ## Getting Started
 
 ### Prerequisites
@@ -128,8 +129,31 @@ kubectl apply -f configs/kubernetes/
 
 4. Submit PR with description
 
+## Document 
 
-### License
+### Architecture
+- [System Architecture](docs//architecture/diagrams/architecture.md)
+- [Database Schema](docs/architecture/diagrams/database-schema.md)
+- [Service Communication](docs/architecture/diagrams/service-communication.md)
+- [Security Flow](docs/architecture/diagrams/security.md)
+
+### Development
+- [Development Guidelines](docs/devguide.md)
+- [Code Standards](docs/devguide.md#coding-standards)
+- [Testing Strategy](docs/devguide.md#testing-guidelines)
+- [Error Handling](docs/devguide.md#error-handling)
+
+### Features
+- [Key Features](docs/keyfeature.md)
+- [API Documentation](docs/api/README.md)
+- [Service Capabilities](docs/keyfeature.md#core-features)
+
+### Operations
+- [Scripts Guide](docs/scripts.md)
+- [Deployment Guide](docs/deployment.md)
+- [Monitoring Setup](docs/monitoring.md)
+
+## License
 
 MIT License
 
