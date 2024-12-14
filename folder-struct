@@ -1,96 +1,109 @@
 crypto-dashboard-backend/
-├── cmd/
-│   ├── api-gateway/
+├── cmd/                             # Main applications
+│   ├── api-gateway/                 # API Gateway entry point
 │   │   └── main.go
-│   ├── user-service/
+│   ├── user-service/                # User Service entry point
 │   │   └── main.go
-│   ├── market-data-service/
+│   ├── market-data-service/         # Market Data Service entry point
 │   │   └── main.go
-│   ├── whale-tracking-service/
+│   ├── whale-tracking-service/      # Whale Tracking Service entry point
 │   │   └── main.go
-│   ├── portfolio-service/
+│   ├── portfolio-service/           # Portfolio Service entry point
 │   │   └── main.go
-│   └── notification-service/
+│   └── notification-service/        # Notification Service entry point
 │       └── main.go
-├── internal/
-│   ├── user/
-│   │   ├── domain/
-│   │   │   ├── entity/
+├── internal/                        # Private application code
+│   ├── user/                        # User domain logic
+│   │   ├── domain/                  # Domain layer
+│   │   │   ├── entity/              # Domain entities
 │   │   │   │   ├── user.go
 │   │   │   │   └── profile.go
-│   │   │   ├── repository/
+│   │   │   ├── repository/          # Repository interfaces
 │   │   │   │   └── interface.go
-│   │   │   └── service/
+│   │   │   └── service/             # Domain services
 │   │   │       └── interface.go
-│   │   ├── application/
-│   │   │   ├── dto/
+│   │   ├── application/             # Application layer
+│   │   │   ├── dto/                 # Data Transfer Objects
 │   │   │   │   ├── request.go
 │   │   │   │   └── response.go
-│   │   │   └── service/
+│   │   │   └── service/             # Application services
 │   │   │       └── user_service.go
-│   │   └── infrastructure/
-│   │       ├── persistence/
+│   │   └── infrastructure/          # Infrastructure layer
+│   │       ├── persistence/         # Persistence implementations
 │   │       │   └── postgres/
-│   │       └── auth/
+│   │       └── auth/                # Authentication implementations
 │   │           └── jwt/
-│   ├── market-data/
-│   │   ├── domain/
-│   │   │   ├── entity/
+│   ├── market-data/                 # Market Data domain logic
+│   │   ├── domain/                  # Domain layer
+│   │   │   ├── entity/              # Domain entities
 │   │   │   │   ├── coin.go
 │   │   │   │   └── market.go
-│   │   │   ├── repository/
-│   │   │   └── service/
-│   │   ├── application/
-│   │   │   ├── dto/
-│   │   │   └── service/
-│   │   └── infrastructure/
-│   │       ├── coingecko/
-│   │       └── binance/
-│   ├── whale-tracking/
-│   │   ├── domain/
-│   │   ├── application/
-│   │   └── infrastructure/
-│   ├── portfolio/
-│   │   ├── domain/
-│   │   ├── application/
-│   │   └── infrastructure/
-│   └── notification/
-│       ├── domain/
-│       ├── application/
-│       └── infrastructure/
-├── pkg/
-│   ├── logger/
-│   ├── database/
-│   │   ├── postgres/
-│   │   └── redis/
-│   ├── messaging/
-│   │   ├── kafka/
-│   │   └── rabbitmq/
-│   ├── auth/
-│   │   └── jwt/
-│   └── websocket/
-├── configs/
-│   ├── development/
+│   │   │   ├── repository/          # Repository interfaces
+│   │   │   └── service/             # Domain services
+│   │   ├── application/             # Application layer
+│   │   │   ├── dto/                 # Data Transfer Objects
+│   │   │   └── service/             # Application services
+│   │   └── infrastructure/          # Infrastructure layer
+│   │       ├── coingecko/           # CoinGecko API integration
+│   │       └── binance/             # Binance API integration
+│   ├── whale-tracking/              # Whale Tracking domain logic
+│   │   ├── domain/                  # Domain layer
+│   │   ├── application/             # Application layer
+│   │   └── infrastructure/          # Infrastructure layer
+│   ├── portfolio/                   # Portfolio domain logic
+│   │   ├── domain/                  # Domain layer
+│   │   ├── application/             # Application layer
+│   │   └── infrastructure/          # Infrastructure layer
+│   └── notification/                # Notification domain logic
+│       ├── domain/                  # Domain layer
+│       ├── application/             # Application layer
+│       └── infrastructure/          # Infrastructure layer
+├── pkg/                             # Shared libraries
+│   ├── logger/                      # Logging utilities
+│   ├── database/                    # Database utilities
+│   │   ├── postgres/                # PostgreSQL utilities
+│   │   └── redis/                   # Redis utilities
+│   ├── messaging/                   # Messaging utilities
+│   │   ├── kafka/                   # Kafka utilities
+│   │   └── rabbitmq/                # RabbitMQ utilities
+│   ├── auth/                        # Authentication utilities
+│   │   └── jwt/                     # JWT utilities
+│   └── websocket/                   # WebSocket utilities
+├── configs/                         # Configuration files
+│   ├── development/                 # Development environment configs
 │   │   └── config.yaml
-│   ├── production/
+│   ├── production/                  # Production environment configs
 │   │   └── config.yaml
-│   └── kubernetes/
+│   └── kubernetes/                  # Kubernetes deployment configs
 │       ├── deployments/
 │       └── services/
-├── scripts/
-│   ├── migrations/
-│   └── seed/
-├── docs/
-│   ├── api/
+├── scripts/                         # Scripts for database migrations and seeding
+│   ├── migrations/                  # Migration scripts
+│   └── seed/                        # Seed scripts
+├── docs/                            # Documentation
+│   ├── api/                         # API documentation
 │   │   └── swagger/
-│   └── architecture/
+│   └── architecture/                # Architecture diagrams and documents
 │       └── diagrams/
-├── tests/
-│   ├── unit/
-│   └── integration/
-├── .gitignore
-├── Dockerfile
-├── docker-compose.yaml
-├── go.mod
-├── go.sum
-└── README.md
+├── sqlc/                            # SQLC generated code and SQL queries
+│   ├── queries/                     # SQL query files
+│   │   ├── user/
+│   │   ├── market-data/
+│   │   ├── whale-tracking/
+│   │   ├── portfolio/
+│   │   └── notification/
+│   └── generated/                   # Generated Go code
+│       ├── user/
+│       ├── market-data/
+│       ├── whale-tracking/
+│       ├── portfolio/
+│       └── notification/
+├── tests/                           # Test files
+│   ├── unit/                        # Unit tests
+│   └── integration/                 # Integration tests
+├── .gitignore                       # Git ignore file
+├── Dockerfile                       # Dockerfile for building the application
+├── docker-compose.yaml              # Docker Compose file for local development
+├── go.mod                           # Go module file
+├── go.sum                           # Go dependencies file
+└── README.md                        # Project README file
