@@ -115,8 +115,9 @@ func getLogLevel(level string) zapcore.Level {
 }
 
 // with context
+
 func (l *Logger) WithContext(ctx context.Context) *zap.Logger {
-	fields := []zap.Field{}
+	var fields []zap.Field
 
 	// Add correlation Id if exists
 
