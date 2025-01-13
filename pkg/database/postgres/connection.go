@@ -1,14 +1,14 @@
 package database
 
 import (
-	"database/sql"
 	"fmt"
+	"github.com/jackc/pgx/v5/pgxpool"
 
 	_ "github.com/lib/pq"
 )
 
 type Connection struct {
-	db  *sql.DB
+	db  *pgxpool.Pool
 	cfg *Config
 }
 
