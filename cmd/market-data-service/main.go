@@ -4,8 +4,6 @@ import (
 	"context"
 	"crypto-dashboard-backend/configs/development"
 	"crypto-dashboard-backend/internal/market-data/application/service"
-	"crypto-dashboard-backend/internal/market-data/infrastructure/coingecko"
-	"crypto-dashboard-backend/internal/market-data/infrastructure/persistence/postgres"
 	"crypto-dashboard-backend/pkg/core/server"
 	database "crypto-dashboard-backend/pkg/database/postgres"
 	"crypto-dashboard-backend/pkg/logger"
@@ -52,9 +50,9 @@ func (s *MarketDataServer) Initialize() error {
 	s.db = db
 
 	// Initialize services
-	coinRepo := postgres.NewCoinRepository(db.DB())
-	coinGeckoClient := coingecko.NewClient()
-	s.coinService = service.NewCoinService(coinRepo, coinGeckoClient, s.Log)
+	//coinRepo := postgres.NewCoinRepository(db.DB())
+	//coinGeckoClient := coingecko.NewClient()
+	//s.coinService = service.NewCoinService(coinRepo, coinGeckoClient, s.Log)
 
 	// Setup routes
 	s.setupRoutes()

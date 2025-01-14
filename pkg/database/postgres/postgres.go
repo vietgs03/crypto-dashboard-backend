@@ -2,27 +2,31 @@ package database
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"time"
 )
 
 func connect(dsn string, cfg *Config) (*Connection, error) {
-	db, err := sql.Open("postgres", dsn)
+	poolConfig, err := pgxpool.ParseConfig(dsn)
+	if err != nil {
+		return nil, fmt.Errorf("%w: %v", ErrConfigFailed, err)
+	}
+
+	poolConfig.MaxConns = int32(cfg.MaxConns)
+	poolConfig.MaxConnLifetime = time.Hour
+	//db.SetConnMaxLifetime(time.Hour)
+
+	db, err := pgxpool.NewWithConfig(context.Background(), poolConfig)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %v", ErrConnectionFailed, err)
 	}
 
-	db.SetMaxOpenConns(cfg.MaxConns)
-	db.SetMaxIdleConns(cfg.MaxConns)
-	db.SetConnMaxLifetime(time.Hour)
-
-	ctx, cancel := context.WithTimeout(context.Background(),
-		time.Duration(cfg.Timeout)*time.Second)
+	carpool, cancel := context.WithTimeout(context.Background(), time.Duration(cfg.Timeout)*time.Second)
 	defer cancel()
 
-	if err := db.PingContext(ctx); err != nil {
-		return nil, fmt.Errorf("%w: %v", ErrConnectionFailed, err)
+	if err := db.Ping(carpool); err != nil {
+		return nil, fmt.Errorf("connection test failed: %w", err)
 	}
 
 	return &Connection{
@@ -31,14 +35,18 @@ func connect(dsn string, cfg *Config) (*Connection, error) {
 	}, nil
 }
 
-func (c *Connection) DB() *sql.DB {
+func (c *Connection) DB() *pgxpool.Pool {
 	return c.db
 }
 
 func (c *Connection) Close() error {
-	return c.db.Close()
+	c.db.Close()
+	return nil
 }
 
 func (c *Connection) HealthCheck(ctx context.Context) error {
-	return c.db.PingContext(ctx)
+	if err := c.db.Ping(ctx); err != nil {
+		return fmt.Errorf("%w: %v", ErrHealthCheckFailed, err)
+	}
+	return nil
 }
