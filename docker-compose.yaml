@@ -3,44 +3,88 @@ version: '3.8'
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: postgres_crypto
+    container_name: pdb
     environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
-      POSTGRES_DB: crypto
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-Kiloma123@}
+      POSTGRES_DB: ${DB_NAME:-Crypto}
+      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_INITDB_ARGS: --auth-host=trust
     ports:
-      - '5432:5432'
+      - '${DB_PORT:-5432}:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - crypto_network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U root"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 30s
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    command:
+      - "postgres"
+      - "-c"
+      - "listen_addresses=*"
 
   redis:
-    image: redis:7.4
+    image: redis:7.4-alpine
     container_name: redis_crypto
-    command: ['redis-server', '--port', '6381']
+    command: redis-server --port 6379 --appendonly yes
     ports:
-      - '6381:6379'
+      - '${REDIS_PORT:-6379}:6379'
     volumes:
       - redis_data:/data
-    restart: unless-stopped
     networks:
       - crypto_network
     healthcheck:
-      test: ["CMD", "redis-cli", "-p", "6381", "ping"]
+      test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
       retries: 3
+      start_period: 20s
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
 volumes:
   postgres_data:
+    name: ${SERVICE_NAME:-market-data-service}_postgres_data
   redis_data:
+    name: ${SERVICE_NAME:-market-data-service}_redis_data
 
 networks:
   crypto_network:
+    name: ${SERVICE_NAME:-market-data-service}_network
     driver: bridge
+
+# Khởi động các containers
+#docker-compose up
+
+# Hoặc chạy ở chế độ detached (chạy ngầm)
+#docker-compose up -d
+
+# Kiểm tra trạng thái các containers
+#docker-compose ps
+
+# Xem logs
+#docker-compose logs
+
+# Xem logs của service cụ thể
+#docker-compose logs postgres
+#docker-compose logs redis
+
+# Dừng các containers
+#docker-compose down
+
+# Dừng và xóa volumes (cẩn thận, sẽ mất data)
+#docker-compose down -v
