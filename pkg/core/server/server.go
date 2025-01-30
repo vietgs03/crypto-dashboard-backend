@@ -2,12 +2,14 @@ package server
 
 import (
 	"context"
-	"crypto-dashboard-backend/pkg/logger"
 	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
+	"crypto-dashboard-backend/pkg/appLogger"
+	"crypto-dashboard-backend/pkg/global"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -17,30 +19,13 @@ import (
 
 type BaseServer struct {
 	App  *fiber.App
-	Log  *logger.Logger
+	Log  *appLogger.Logger
 	Port int
 	Name string
 }
 
-type Config struct {
-	Port            int
-	Name            string
-	Environment     string
-	LogLevel        string
-	ShutdownTimeout time.Duration
-}
-
-func NewBaseServer(cfg *Config) (*BaseServer, error) {
-	// Initialize logger
-	log, err := logger.NewLogger(&logger.LogConfig{
-		Level:       cfg.LogLevel,
-		ServiceName: cfg.Name,
-		Environment: cfg.Environment,
-	})
-	if err != nil {
-		return nil, fmt.Errorf("failed to create logger: %w", err)
-	}
-
+// TODO this core will not in package
+func NewBaseServer() (*BaseServer, error) {
 	// Configure Fiber app
 	app := fiber.New(fiber.Config{
 		ReadTimeout:  10 * time.Second,
@@ -57,9 +42,9 @@ func NewBaseServer(cfg *Config) (*BaseServer, error) {
 
 	return &BaseServer{
 		App:  app,
-		Log:  log,
-		Port: cfg.Port,
-		Name: cfg.Name,
+		Log:  global.Logger,
+		Port: global.Config.Server.Port,
+		Name: global.Config.Server.ServiceName,
 	}, nil
 }
 
