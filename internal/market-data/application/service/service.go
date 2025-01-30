@@ -2,10 +2,12 @@ package service
 
 import (
 	"context"
+	"crypto-dashboard-backend/internal/market-data/domain/entity"
 	"crypto-dashboard-backend/internal/market-data/domain/repository"
 	"crypto-dashboard-backend/internal/market-data/infrastructure/coingecko"
 	"crypto-dashboard-backend/pkg/logger"
 
+	"fmt"
 	"time"
 
 	"go.uber.org/zap"
@@ -60,4 +62,23 @@ func (s *CoinService) FetchAndStoreCoins(ctx context.Context) error {
 	)
 
 	return nil
+}
+
+func (s *CoinService) GetCoins(ctx context.Context) ([]*entity.Coin, error) {
+	if s.repo == nil {
+		return nil, fmt.Errorf("repository not initialized")
+	}
+	if s.log == nil {
+		return nil, fmt.Errorf("logger not initialized")
+	}
+
+	logger := s.log.WithContext(ctx)
+
+	coins, err := s.repo.GetCoins(ctx)
+	if err != nil {
+		logger.Error("failed to get coins", zap.Error(err))
+		return nil, err
+	}
+
+	return coins, nil
 }
