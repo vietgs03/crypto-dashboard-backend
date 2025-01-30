@@ -11,6 +11,7 @@ import (
 	database "crypto-dashboard-backend/pkg/database/postgres"
 	"crypto-dashboard-backend/pkg/logger"
 	"crypto-dashboard-backend/pkg/middleware"
+	"crypto-dashboard-backend/pkg/migration"
 	"fmt"
 	"os"
 
@@ -43,6 +44,10 @@ func (s *MarketDataServer) Initialize() error {
 
 	// Add request logging middleware
 	s.App.Use(middleware.RequestLogger(s.Log))
+
+	// Initialize migrate
+	migrateConfig := migration.DefaultConfigMigrate()
+	migration.RunDBMigration(migrateConfig.MigrationURL, migrateConfig.DBSource)
 
 	// Initialize database
 	dbConfig := database.DefaultConfig()
