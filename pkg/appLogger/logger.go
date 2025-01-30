@@ -1,4 +1,4 @@
-package logger
+package appLogger
 
 import (
 	"context"
@@ -7,33 +7,21 @@ import (
 	"path/filepath"
 	"time"
 
+	"crypto-dashboard-backend/pkg/constants"
+
 	"github.com/google/uuid"
 	"github.com/natefinch/lumberjack"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
 
-type ctxKey string
-
-const (
-	CorrelationIDKey ctxKey = "correlation_id"
-	RequestIDKey     ctxKey = "request_id"
-	ServiceKey       ctxKey = "service"
-)
-
 // Logger is the interface for logging
-type Logger struct {
-	*zap.Logger
-	serviceName string
-}
-
-type Config struct {
-	Level       string
-	ServiceName string
-	Environment string
-}
-
-// New creates a new logger
+type (
+	Logger struct {
+		*zap.Logger
+		serviceName string
+	}
+)
 
 func NewLogger(cfg *LogConfig) (*Logger, error) {
 	if cfg.LogDir == "" {
@@ -41,7 +29,7 @@ func NewLogger(cfg *LogConfig) (*Logger, error) {
 			time.Now().Format("2006-01-02"))
 	}
 
-	if err := os.MkdirAll(cfg.LogDir, 0755); err != nil {
+	if err := os.MkdirAll(cfg.LogDir, 0o755); err != nil {
 		return nil, fmt.Errorf("failed to create log directory: %w", err)
 	}
 
@@ -121,13 +109,13 @@ func (l *Logger) WithContext(ctx context.Context) *zap.Logger {
 
 	// Add correlation Id if exists
 
-	if cid, ok := ctx.Value(CorrelationIDKey).(string); ok {
+	if cid, ok := ctx.Value(constants.CORRELATION_ID_KEY).(string); ok {
 		fields = append(fields, zap.String("correlation_id", cid))
 	}
 
 	// Add request Id if exists
 
-	if rid, ok := ctx.Value(RequestIDKey).(string); ok {
+	if rid, ok := ctx.Value(constants.REQUEST_ID_KEY).(string); ok {
 		fields = append(fields, zap.String("request_id", rid))
 	}
 
@@ -148,31 +136,49 @@ func (l *Logger) WithError(err error) *zap.Logger {
 
 func (l *Logger) NewContext(ctx context.Context) context.Context {
 	cid := uuid.New().String()
-	return context.WithValue(ctx, CorrelationIDKey, cid)
+	return context.WithValue(ctx, constants.CORRELATION_ID_KEY, cid)
 }
 
-func (l *Logger) RequestStarted(ctx context.Context, method, path string) {
-	l.WithContext(ctx).Info("request_started",
-		zap.String("method", method),
-		zap.String("path", path),
-		zap.Time("start_time", time.Now()),
-	)
-}
+// func (l *Logger) RequestStarted(ctx context.Context, method, path string) {
+// 	l.WithContext(ctx).Info("request_started",
+// 		zap.String("method", method),
+// 		zap.String("path", path),
+// 		zap.Time("start_time", time.Now()),
+// 	)
+// }
 
-func (l *Logger) RequestCompleted(ctx context.Context, method, path string, statusCode int, duration time.Duration) {
-	l.WithContext(ctx).Info("request_completed",
-		zap.String("method", method),
-		zap.String("path", path),
-		zap.Int("status_code", statusCode),
-		zap.Duration("duration", duration),
-	)
-}
+// func (l *Logger) RequestCompleted(ctx context.Context, method, path string, statusCode int, duration time.Duration) {
+// 	l.WithContext(ctx).Info("request_completed",
+// 		zap.String("method", method),
+// 		zap.String("path", path),
+// 		zap.Int("status_code", statusCode),
+// 		zap.Duration("duration", duration),
+// 	)
+// }
 
-func (l *Logger) Error(ctx context.Context, msg string, err error, fields ...zap.Field) {
+func (l *Logger) ErrorWithCtx(ctx context.Context, msg string, err error, fields ...zap.Field) {
 	if err != nil {
 		fields = append(fields, zap.Error(err))
 	}
 	l.WithContext(ctx).Error(msg, fields...)
+}
+
+func (l *Logger) InfoWithCtx(ctx context.Context, msg string, err error, fields ...zap.Field) {
+	if err != nil {
+		fields = append(fields, zap.Error(err))
+	}
+	l.WithContext(ctx).Info(msg, fields...)
+}
+
+func (l *Logger) Info(msg string, fields ...zap.Field) {
+	l.Logger.Info(msg, fields...)
+}
+
+func (l *Logger) Error(msg string, err error, fields ...zap.Field) {
+	if err != nil {
+		fields = append(fields, zap.Error(err))
+	}
+	l.Logger.Error(msg, fields...)
 }
 
 func createEncoderConfig() zapcore.EncoderConfig {

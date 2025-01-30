@@ -1,4 +1,4 @@
-package logger
+package appLogger
 
 type LogConfig struct {
 	Level       string
