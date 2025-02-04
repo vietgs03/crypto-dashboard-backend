@@ -3,8 +3,9 @@ package database
 import (
 	"context"
 	"fmt"
-	"github.com/jackc/pgx/v5/pgxpool"
 	"time"
+
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 func connect(dsn string, cfg *Config) (*Connection, error) {
@@ -15,7 +16,7 @@ func connect(dsn string, cfg *Config) (*Connection, error) {
 
 	poolConfig.MaxConns = int32(cfg.MaxConns)
 	poolConfig.MaxConnLifetime = time.Hour
-	//db.SetConnMaxLifetime(time.Hour)
+	// db.SetConnMaxLifetime(time.Hour)
 
 	db, err := pgxpool.NewWithConfig(context.Background(), poolConfig)
 	if err != nil {
