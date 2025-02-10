@@ -3,6 +3,7 @@ package constants
 type (
 	InternalCode int
 	ServerCode   int
+	MsgBase      string
 )
 
 const (
@@ -44,26 +45,28 @@ const (
 	consumerSer      ServerCode = 1006
 	orchestratorSer  ServerCode = 1007
 	jobSer           ServerCode = 1008
+
+	DatabaseNotFound MsgBase = "entity not found"
 )
 
 // message for Client
 var Msg = map[InternalCode]string{
 	Success:          "success",
-	ParamInvalid:     "Email is invalid",
+	ParamInvalid:     "email is invalid",
 	InvalidToken:     "token is invalid",
 	InvalidOTP:       "Otp error",
 	CantSendEmailOtp: "Failed to send email OTP",
 
 	UserHasExists: "user has already registered",
 
-	OtpNotExists:     "OTP exists but not registered",
-	UserOtpNotExists: "User OTP not exists",
-	AuthFailed:       "Authentication failed",
+	OtpNotExists:     "otp exists but not registered",
+	UserOtpNotExists: "user otp not exists",
+	AuthFailed:       "authentication failed",
 
 	// Two Factor Authentication
-	TwoFactorAuthSetupFailed:  "Two Factor Authentication setup failed",
-	TwoFactorAuthVerifyFailed: "Two Factor Authentication verify failed",
+	TwoFactorAuthSetupFailed:  "two factor authentication setup failed",
+	TwoFactorAuthVerifyFailed: "two factor authentication verify failed",
 
-	InternalServerErr: "Internal Server Error",
-	DatabaseErr:       "Internal Server Error",
+	InternalServerErr: "internal server error",
+	DatabaseErr:       "internal server error",
 }

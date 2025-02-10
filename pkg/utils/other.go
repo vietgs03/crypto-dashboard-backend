@@ -23,5 +23,26 @@ func IsBlank(v *string) bool {
 
 func WriteFile(name string, data any) {
 	b, _ := json.Marshal(data)
-	_ = os.WriteFile(name, b, 0644)
+	_ = os.WriteFile(name, b, 0o644)
+}
+
+func PaginationOpts(page, limit uint) (take, skip uint) {
+	limit = min(limit, 100)
+
+	page = max(page, 1)
+	return limit, (page - 1) * limit
+}
+
+func max(a, b uint) uint {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+func min(a, b uint) uint {
+	if a < b {
+		return a
+	}
+	return b
 }
