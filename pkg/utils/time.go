@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"time"
 
-	"crypto-dashboard-backend/pkg/constants"
-	"crypto-dashboard-backend/pkg/response"
+	"crypto-dashboard/pkg/constants"
+	"crypto-dashboard/pkg/response"
 
 	"github.com/samber/lo"
 )

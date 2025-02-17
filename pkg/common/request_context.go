@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"crypto-dashboard-backend/pkg/dtos/duser"
+	"crypto-dashboard/pkg/dtos/duser"
 
 	"github.com/google/uuid"
 )
@@ -12,7 +12,8 @@ import (
 type (
 	ReqContext struct {
 		CID              string `json:"cid"`
-		RequestTimestamp int64  `json:"request_timestamp"`
+		IP               string
+		RequestTimestamp int64 `json:"request_timestamp"`
 		UserInfo         *duser.UserInfo
 		AccessToken      *string `json:"access_token"`
 		RefreshToken     *string `json:"refresh_token"`

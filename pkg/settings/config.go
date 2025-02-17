@@ -1,47 +1,42 @@
 package settings
 
-type Config struct {
-	Server ServerSetting `mapstructure:"server"`
-	Sql    SQLSetting    `mapstructure:"sql"`
-	Logger LoggerSetting `mapstructure:"logger"`
-	Redis  CacheSetting  `mapstructure:"redis"`
-	JWT    JWTSetting    `mapstructure:"jwt"`
-}
-
 type ServerSetting struct {
-	Port        int    `mapstructure:"port"`
-	Mode        string `mapstructure:"mode"`
-	Level       string `mapstructure:"level"`
-	ServiceName string `mapstructure:"service_name"`
-	Environment string `mapstructure:"environment"`
+	Port        int    `mapstructure:"PORT"`
+	Mode        string `mapstructure:"MODE"`
+	Database    string `mapstructure:"DATABASE"`
+	Level       string `mapstructure:"LEVEL"`
+	ServiceName string `mapstructure:"SERVICE_NAME"`
+	Environment string `mapstructure:"ENVIRONMENT"`
 }
 
 type CacheSetting struct {
-	Host     string `mapstructure:"host"`
-	Port     int    `mapstructure:"port"`
-	Password string `mapstructure:"password"`
-	Database int    `mapstructure:"database"`
+	Host     string `mapstructure:"HOST"`
+	Port     int    `mapstructure:"PORT"`
+	Password string `mapstructure:"PASSWORD"`
+	Database int    `mapstructure:"DATABASE"`
+	PoolSize int    `mapstructure:"POOL_SIZE"`
 }
 
 type SQLSetting struct {
-	Host            string `mapstructure:"host"`
-	Port            int    `mapstructure:"port"`
-	Username        string `mapstructure:"username"`
-	Password        string `mapstructure:"password"`
-	Dbname          string `mapstructure:"dbname"`
-	MaxIdleConns    int    `mapstructure:"maxIdleConns"`
-	MaxOpenConns    int    `mapstructure:"maxOpenConns"`
-	ConnMaxLifetime int    `mapstructure:"connMaxLifetime"`
+	Host            string `mapstructure:"HOST"`
+	Port            int    `mapstructure:"PORT"`
+	Username        string `mapstructure:"USERNAME"`
+	Password        string `mapstructure:"PASSWORD"`
+	DBname          string `mapstructure:"DBNAME"`
+	SSLMode         string `mapstructure:"SSL_MODE"`
+	MaxConnIdleTime uint32 `mapstructure:"MAX_CONN_IDLE_TIME"`
+	MaxConnLifetime uint64 `mapstructure:"MAX_CONN_LIFE_TIME"`
+	MaxConns        uint8  `mapstructure:"MAX_CONNS"`
 }
 
 type LoggerSetting struct {
-	Level      string `mapstructure:"level"`
-	FileOutput bool   `mapstructure:"file_output"`
-	LogDir     string `mapstructure:"log_dir"`
-	MaxSize    int    `mapstructure:"max_size"`
-	MaxAge     int    `mapstructure:"max_age"`
-	MaxBackups int    `mapstructure:"max_backups"`
-	Compress   bool   `mapstructure:"compress"`
+	Level      string `mapstructure:"LEVEL"`
+	FileOutput bool   `mapstructure:"FILE_OUTPUT"`
+	LogDir     string `mapstructure:"LOG_DIR"`
+	MaxSize    int    `mapstructure:"MAX_SIZE"`
+	MaxAge     int    `mapstructure:"MAX_AGE"`
+	MaxBackups int    `mapstructure:"MAX_BACKUPS"`
+	Compress   bool   `mapstructure:"COMPRESS"`
 }
 
 // JWT Settings

@@ -5,25 +5,28 @@ import (
 	"fmt"
 	"time"
 
+	"crypto-dashboard/pkg/response"
+	"crypto-dashboard/pkg/settings"
+
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func connect(dsn string, cfg *Config) (*Connection, error) {
+func connect(dsn string, cfg *settings.SQLSetting) (*Connection, error) {
 	poolConfig, err := pgxpool.ParseConfig(dsn)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %v", ErrConfigFailed, err)
 	}
 
 	poolConfig.MaxConns = int32(cfg.MaxConns)
-	poolConfig.MaxConnLifetime = time.Hour
-	// db.SetConnMaxLifetime(time.Hour)
+	poolConfig.MaxConnLifetime = time.Duration(cfg.MaxConnLifetime)
+	poolConfig.MaxConnIdleTime = time.Duration(cfg.MaxConnIdleTime)
 
 	db, err := pgxpool.NewWithConfig(context.Background(), poolConfig)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %v", ErrConnectionFailed, err)
 	}
 
-	carpool, cancel := context.WithTimeout(context.Background(), time.Duration(cfg.Timeout)*time.Second)
+	carpool, cancel := context.WithTimeout(context.Background(), time.Duration(cfg.MaxConnLifetime)*time.Second)
 	defer cancel()
 
 	if err := db.Ping(carpool); err != nil {
@@ -45,9 +48,9 @@ func (c *Connection) Close() error {
 	return nil
 }
 
-func (c *Connection) HealthCheck(ctx context.Context) error {
+func (c *Connection) HealthCheck(ctx context.Context) *response.AppError {
 	if err := c.db.Ping(ctx); err != nil {
-		return fmt.Errorf("%w: %v", ErrHealthCheckFailed, err)
+		return response.DatabaseError(fmt.Errorf("%w: %v", ErrHealthCheckFailed, err))
 	}
 	return nil
 }

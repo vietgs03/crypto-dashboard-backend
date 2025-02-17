@@ -1,7 +1,7 @@
 package response
 
 import (
-	"crypto-dashboard-backend/pkg/constants"
+	"crypto-dashboard/pkg/constants"
 
 	"github.com/gofiber/fiber/v2"
 )

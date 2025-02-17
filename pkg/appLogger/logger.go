@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"crypto-dashboard-backend/pkg/constants"
+	"crypto-dashboard/pkg/constants"
 
 	"github.com/natefinch/lumberjack"
 	"go.uber.org/zap"

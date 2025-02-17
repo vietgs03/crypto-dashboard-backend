@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"crypto-dashboard-backend/pkg/constants"
+	"crypto-dashboard/pkg/constants"
 )
 
 type AppError struct {

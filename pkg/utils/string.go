@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"crypto-dashboard-backend/pkg/constants"
-	"crypto-dashboard-backend/pkg/response"
+	"crypto-dashboard/pkg/constants"
+	"crypto-dashboard/pkg/response"
 
 	"github.com/samber/lo"
 	"github.com/sqids/sqids-go"

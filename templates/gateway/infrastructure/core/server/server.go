@@ -8,12 +8,12 @@ import (
 	"syscall"
 	"time"
 
-	"crypto-dashboard-backend/pkg/appLogger"
-	"crypto-dashboard-backend/pkg/global"
+	"crypto-dashboard/gw-example/infrastructure/global"
+	"crypto-dashboard/pkg/appLogger"
 
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cors"
-	"github.com/gofiber/fiber/v2/middleware/recover"
+	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v3/middleware/cors"
+	"github.com/gofiber/fiber/v3/middleware/recover"
 	"go.uber.org/zap"
 )
 
@@ -37,8 +37,8 @@ func NewBaseServer(run func() *global.AppServer) (*BaseServer, error) {
 	// Add base middleware
 	app.Use(recover.New())
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "*",
-		AllowHeaders: "Origin, Content-Type, Accept",
+		AllowOrigins: []string{"*"},
+		AllowHeaders: []string{"Origin, Content-Type, Accept"},
 	}))
 
 	return &BaseServer{

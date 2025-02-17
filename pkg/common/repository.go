@@ -9,9 +9,9 @@ import (
 	"reflect"
 	"strings"
 
-	"crypto-dashboard-backend/pkg/constants"
-	"crypto-dashboard-backend/pkg/response"
-	"crypto-dashboard-backend/pkg/utils"
+	"crypto-dashboard/pkg/constants"
+	"crypto-dashboard/pkg/response"
+	"crypto-dashboard/pkg/utils"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )

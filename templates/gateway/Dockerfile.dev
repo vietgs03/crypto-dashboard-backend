@@ -1,0 +1,1 @@
+FROM golang:${GO_IMAGE_VERSION} AS go-builder

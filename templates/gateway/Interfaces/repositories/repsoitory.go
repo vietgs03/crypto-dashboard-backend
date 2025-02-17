@@ -1,8 +1,8 @@
 package repositories
 
 import (
-	"crypto-dashboard-backend/pkg/common"
-	"crypto-dashboard-backend/templates/gateway/domain/entities"
+	"crypto-dashboard/gw-example/domain/entities"
+	"crypto-dashboard/pkg/common"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )

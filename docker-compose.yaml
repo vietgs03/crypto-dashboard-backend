@@ -1,9 +1,9 @@
-version: '3.8'
+version: "3.8"
 
 services:
-  postgres:
-    image: postgres:16-alpine
-    container_name: pdb
+  database:
+    image: 17.3-alpine3.21
+    container_name: database_crypto
     environment:
       POSTGRES_USER: ${DB_USER:-postgres}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-Kiloma123@}
@@ -11,7 +11,7 @@ services:
       POSTGRES_HOST_AUTH_METHOD: trust
       POSTGRES_INITDB_ARGS: --auth-host=trust
     ports:
-      - '${DB_PORT:-5432}:5432'
+      - "${DB_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
@@ -33,12 +33,12 @@ services:
       - "-c"
       - "listen_addresses=*"
 
-  redis:
+  caching:
     image: redis:7.4-alpine
-    container_name: redis_crypto
+    container_name: caching_crypto
     command: redis-server --port 6379 --appendonly yes
     ports:
-      - '${REDIS_PORT:-6379}:6379'
+      - "${REDIS_PORT:-6379}:6379"
     volumes:
       - redis_data:/data
     networks:
@@ -58,33 +58,11 @@ services:
 
 volumes:
   postgres_data:
-    name: ${SERVICE_NAME:-market-data-service}_postgres_data
+    name: ${SERVICE_NAME:-crypto-dashboard}_postgres_data
   redis_data:
-    name: ${SERVICE_NAME:-market-data-service}_redis_data
+    name: ${SERVICE_NAME:-crypto-dashboard}_redis_data
 
 networks:
   crypto_network:
-    name: ${SERVICE_NAME:-market-data-service}_network
+    name: ${SERVICE_NAME:-crypto-dashboard}_network
     driver: bridge
-
-# Khởi động các containers
-#docker-compose up
-
-# Hoặc chạy ở chế độ detached (chạy ngầm)
-#docker-compose up -d
-
-# Kiểm tra trạng thái các containers
-#docker-compose ps
-
-# Xem logs
-#docker-compose logs
-
-# Xem logs của service cụ thể
-#docker-compose logs postgres
-#docker-compose logs redis
-
-# Dừng các containers
-#docker-compose down
-
-# Dừng và xóa volumes (cẩn thận, sẽ mất data)
-#docker-compose down -v
