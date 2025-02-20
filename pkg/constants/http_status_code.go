@@ -1,5 +1,7 @@
 package constants
 
+import "net/http"
+
 type (
 	InternalCode int
 	ServerCode   int
@@ -16,6 +18,7 @@ const (
 	// token
 	InvalidToken InternalCode = 3001
 	InvalidOTP   InternalCode = 3002
+	AcceptDenied InternalCode = 3003
 
 	// otp
 	CantSendEmailOtp InternalCode = 4003
@@ -69,4 +72,25 @@ var Msg = map[InternalCode]string{
 
 	InternalServerErr: "internal server error",
 	DatabaseErr:       "internal server error",
+}
+
+var HttpCode = map[InternalCode]int{
+	Success:          http.StatusOK,
+	ParamInvalid:     http.StatusBadRequest,
+	InvalidToken:     http.StatusUnauthorized,
+	InvalidOTP:       http.StatusUnauthorized,
+	CantSendEmailOtp: http.StatusInternalServerError,
+
+	UserHasExists: http.StatusConflict,
+
+	OtpNotExists:     http.StatusUnauthorized,
+	UserOtpNotExists: http.StatusUnauthorized,
+	AuthFailed:       http.StatusUnauthorized,
+
+	// Two Factor Authentication
+	TwoFactorAuthSetupFailed:  http.StatusInternalServerError,
+	TwoFactorAuthVerifyFailed: http.StatusInternalServerError,
+
+	InternalServerErr: http.StatusInternalServerError,
+	DatabaseErr:       http.StatusInternalServerError,
 }

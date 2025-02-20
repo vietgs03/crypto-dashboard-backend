@@ -2,28 +2,26 @@ package response
 
 import (
 	"fmt"
-	"net/http"
 
 	"crypto-dashboard/pkg/constants"
 )
 
 type AppError struct {
-	Status  int                    `json:"status"`
 	Code    constants.InternalCode `json:"code"`
 	Data    string                 `json:"data,omitempty"`
 	Message string                 `json:"message"`
 }
 
 func (r *AppError) IsZero() bool {
-	return r.Status == 0
+	return r.Code == 0
 }
 
 func (r *AppError) Error() string {
 	return fmt.Sprintf("%d:%s", r.Code, r.Message)
 }
 
-func NewAppError(code constants.InternalCode, status int, message string) *AppError {
-	return &AppError{Code: code, Message: message, Status: status}
+func NewAppError(code constants.InternalCode, message string) *AppError {
+	return &AppError{Code: code, Message: message}
 }
 
 func (r *AppError) WithData(data string) *AppError {
@@ -32,21 +30,41 @@ func (r *AppError) WithData(data string) *AppError {
 }
 
 func QueryNotFound(message string) *AppError {
-	return NewAppError(constants.QueryNotFound, http.StatusNotFound, message)
+	return NewAppError(constants.QueryNotFound, message)
 }
 
 func QueryInvalid(message string) *AppError {
-	return NewAppError(constants.ParamInvalid, http.StatusInternalServerError, message)
+	if message == "" {
+		message = "invalid query"
+	}
+	return NewAppError(constants.ParamInvalid, message)
 }
 
 func DatabaseError(err error) *AppError {
-	return NewAppError(constants.DatabaseErr, http.StatusInternalServerError, err.Error())
+	return NewAppError(constants.DatabaseErr, err.Error())
 }
 
-func MQUnauthorization() *AppError {
-	return NewAppError(constants.InvalidToken, http.StatusUnauthorized, "need authenticated for request.")
+func Unauthorization(message string) *AppError {
+	if message != "" {
+		message = "need authenticated for request."
+	}
+	return NewAppError(constants.InvalidToken, "need authenticated for request.")
 }
 
-func MQAccessDenined() *AppError {
-	return NewAppError(constants.InvalidToken, http.StatusForbidden, "need specific roles for request")
+func AccessDenined() *AppError {
+	return NewAppError(constants.AcceptDenied, "need specific roles for request")
+}
+
+func UnknownError(message string) *AppError {
+	if message == "" {
+		message = "unknown error"
+	}
+	return NewAppError(constants.InternalServerErr, message)
+}
+
+func ServerError(message string) *AppError {
+	if message == "" {
+		message = "server error"
+	}
+	return NewAppError(constants.InternalServerErr, message)
 }

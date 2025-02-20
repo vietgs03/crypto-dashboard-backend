@@ -36,3 +36,6 @@ build-init:
 	rm -rf ./shared/tests
 	docker buildx build --platform linux/amd64 --load -t easier-naas:latest -f Dockerfile.prd .
 	rm -R shared/
+
+generate-proto:
+	protoc --go_out=./proto --go-grpc_out=./proto proto/schema/*.proto

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/rand"
-	"net/http"
 	"strings"
 	"time"
 
@@ -56,7 +55,7 @@ func GenerateShortUUID(baseId uint) string {
 func ParseIdFromShortUUID(uuid string) (*uint, *response.AppError) {
 	ids := sqID.Decode(uuid)
 	if len(ids) == 0 {
-		return nil, response.NewAppError(constants.UuidInvalid, http.StatusBadRequest, "Invalid short UUID")
+		return nil, response.NewAppError(constants.UuidInvalid, "Invalid short UUID")
 	}
 
 	return lo.ToPtr(uint(ids[0])), nil

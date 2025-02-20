@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"net/http"
 	"time"
 
 	"crypto-dashboard/pkg/constants"
@@ -29,7 +28,7 @@ func TimeToString(t time.Time, frm string) string {
 func StringToTime(dateStr, frm string) (*time.Time, *response.AppError) {
 	parsedTime, err := time.Parse(string(frm), dateStr)
 	if err != nil {
-		return nil, response.NewAppError(constants.TimeInvalid, http.StatusInternalServerError, "invalid time format")
+		return nil, response.NewAppError(constants.TimeInvalid, "invalid time format")
 	}
 
 	return &parsedTime, nil

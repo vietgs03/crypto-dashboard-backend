@@ -1,9 +1,10 @@
 package duser
 
 type (
-	UserInfo struct {
+	UserInfo[T any] struct {
 		ID       uint   `json:"id"`
 		Username string `json:"username"`
 		Email    string `json:"email"`
+		Info     T      `json:"info"`
 	}
 )

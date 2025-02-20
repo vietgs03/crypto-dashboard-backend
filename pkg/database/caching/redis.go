@@ -2,10 +2,10 @@ package caching
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"log/slog"
 
+	"crypto-dashboard/pkg/response"
 	"crypto-dashboard/pkg/settings"
 
 	redisV9 "github.com/redis/go-redis/v9"
@@ -18,7 +18,7 @@ type CacheClient struct {
 	client *redisV9.Client
 }
 
-func NewRedisClient(cfg *settings.CacheSetting) (*CacheClient, error) {
+func NewRedisClient(cfg *settings.CacheSetting) (*CacheClient, *response.AppError) {
 	redis := &CacheClient{
 		cfg: cfg,
 	}
@@ -32,7 +32,7 @@ func NewRedisClient(cfg *settings.CacheSetting) (*CacheClient, error) {
 
 	_, err := redis.client.Ping(ctx).Result()
 	if err != nil {
-		return nil, errors.New("failed to connect redis" + err.Error())
+		return nil, response.ServerError("failed to connect redis " + err.Error())
 	}
 	slog.Info("redis connect success")
 	return redis, nil

@@ -3,6 +3,7 @@ package database
 import (
 	"fmt"
 
+	"crypto-dashboard/pkg/response"
 	"crypto-dashboard/pkg/settings"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -15,7 +16,7 @@ type Connection struct {
 	cfg *settings.SQLSetting
 }
 
-func NewConnection(cfg *settings.SQLSetting) (*Connection, error) {
+func NewConnection(cfg *settings.SQLSetting) (*Connection, *response.AppError) {
 	dsn := fmt.Sprintf(
 		"host=%s port=%d user=%s password=%s dbname=%s sslmode=%s",
 		cfg.Host, cfg.Port, cfg.Username, cfg.Password, cfg.DBname, cfg.SSLMode,

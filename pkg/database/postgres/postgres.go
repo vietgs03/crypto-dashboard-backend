@@ -11,10 +11,10 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func connect(dsn string, cfg *settings.SQLSetting) (*Connection, error) {
+func connect(dsn string, cfg *settings.SQLSetting) (*Connection, *response.AppError) {
 	poolConfig, err := pgxpool.ParseConfig(dsn)
 	if err != nil {
-		return nil, fmt.Errorf("%w: %v", ErrConfigFailed, err)
+		return nil, response.DatabaseError(fmt.Errorf("%w: %v", ErrConfigFailed, err))
 	}
 
 	poolConfig.MaxConns = int32(cfg.MaxConns)
@@ -23,14 +23,14 @@ func connect(dsn string, cfg *settings.SQLSetting) (*Connection, error) {
 
 	db, err := pgxpool.NewWithConfig(context.Background(), poolConfig)
 	if err != nil {
-		return nil, fmt.Errorf("%w: %v", ErrConnectionFailed, err)
+		return nil, response.DatabaseError(fmt.Errorf("%w: %v", ErrConnectionFailed, err))
 	}
 
 	carpool, cancel := context.WithTimeout(context.Background(), time.Duration(cfg.MaxConnLifetime)*time.Second)
 	defer cancel()
 
 	if err := db.Ping(carpool); err != nil {
-		return nil, fmt.Errorf("connection test failed: %w", err)
+		return nil, response.DatabaseError(fmt.Errorf("connection test failed: %w", err))
 	}
 
 	return &Connection{

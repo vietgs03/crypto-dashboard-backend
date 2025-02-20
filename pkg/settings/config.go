@@ -3,7 +3,6 @@ package settings
 type ServerSetting struct {
 	Port        int    `mapstructure:"PORT"`
 	Mode        string `mapstructure:"MODE"`
-	Database    string `mapstructure:"DATABASE"`
 	Level       string `mapstructure:"LEVEL"`
 	ServiceName string `mapstructure:"SERVICE_NAME"`
 	Environment string `mapstructure:"ENVIRONMENT"`

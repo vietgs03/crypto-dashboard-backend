@@ -21,10 +21,10 @@ type (
 	PaginationQuery       struct {
 		CountSQL    string
 		QuerySQL    string
-		Params      []interface{}
+		Params      []any
 		Page        int
 		Take        int
-		ItemMappers func(*sql.Rows) interface{}
+		ItemMappers func(*sql.Rows) any
 	}
 
 	Where struct {
@@ -158,7 +158,7 @@ func (r *Repository[T]) CreateMany(ctx context.Context, entities ...*T) ([]T, *r
 	numberRecords := len(entities) * r.fieldInsertCount
 
 	columns := make([]string, 0, r.fieldInsertCount)
-	values := make([]interface{}, 0, numberRecords)
+	values := make([]any, 0, numberRecords)
 
 	for i := 0; i < t.NumField(); i++ {
 		field := t.Field(i)
@@ -172,7 +172,7 @@ func (r *Repository[T]) CreateMany(ctx context.Context, entities ...*T) ([]T, *r
 
 	for _, entity := range entities {
 		v := reflect.ValueOf(entity)
-		value := make([]interface{}, 0, r.fieldInsertCount)
+		value := make([]any, 0, r.fieldInsertCount)
 		valueStrings.WriteString("(")
 		for i := 0; i < t.NumField(); i++ {
 			field := t.Field(i)
@@ -235,7 +235,7 @@ func (r *Repository[T]) CreateWithOnConflicting(ctx context.Context, conflictStr
 
 	for _, entity := range entities {
 		v := reflect.ValueOf(entity)
-		value := make([]interface{}, 0, r.fieldInsertCount)
+		value := make([]any, 0, r.fieldInsertCount)
 		valueStrings.WriteString("(")
 		for i := 0; i < t.NumField(); i++ {
 			value = append(value, v.Field(i).Interface())

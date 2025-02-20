@@ -6,8 +6,8 @@ import (
 	"strings"
 )
 
-func CompareValueStructs[T any](old T, new T, ignoreFields []string, prefix string) (map[string]interface{}, error) {
-	changes := make(map[string]interface{})
+func CompareValueStructs[T any](old T, new T, ignoreFields []string, prefix string) (map[string]any, error) {
+	changes := make(map[string]any)
 	ignoreMap := make(map[string]bool)
 
 	for _, field := range ignoreFields {
@@ -25,7 +25,7 @@ func CompareValueStructs[T any](old T, new T, ignoreFields []string, prefix stri
 	}
 
 	if oldVal.Kind() != reflect.Struct || newVal.Kind() != reflect.Struct {
-		return map[string]interface{}{}, fmt.Errorf("only structs are supported")
+		return map[string]any{}, fmt.Errorf("only structs are supported")
 	}
 
 	for i := 0; i < oldVal.NumField(); i++ {
@@ -52,14 +52,14 @@ func CompareValueStructs[T any](old T, new T, ignoreFields []string, prefix stri
 
 			nestedChanges, err := CompareValueStructs(oldValue, newValue, ignoreFields, fullFieldName)
 			if err != nil {
-				return map[string]interface{}{}, err
+				return map[string]any{}, err
 			}
 			if len(nestedChanges) > 0 {
 				changes[jsonTag] = nestedChanges
 			}
 		} else {
 			if !reflect.DeepEqual(oldValue, newValue) {
-				changes[jsonTag] = map[string]interface{}{
+				changes[jsonTag] = map[string]any{
 					"old_value": oldValue,
 					"new_value": newValue,
 				}
