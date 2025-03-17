@@ -2,6 +2,7 @@ package response
 
 import (
 	"fmt"
+	"reflect"
 
 	"crypto-dashboard/pkg/constants"
 )
@@ -67,4 +68,16 @@ func ServerError(message string) *AppError {
 		message = "server error"
 	}
 	return NewAppError(constants.InternalServerErr, message)
+}
+
+func ConvertError(err error) *AppError {
+	if err == nil || reflect.TypeOf(err).Kind() == reflect.Ptr && reflect.ValueOf(err).IsNil() {
+		return nil
+	}
+
+	if appErr, ok := err.(*AppError); ok {
+		return appErr
+	}
+
+	return NewAppError(constants.InternalServerErr, err.Error())
 }
